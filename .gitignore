@@ -1,0 +1,6 @@
+# This is git ignore file.
+
+*.asv
+*.csv
+*.gz
+*.zip
