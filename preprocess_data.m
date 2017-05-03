@@ -22,8 +22,8 @@ for file = all_data'
         mid_int = median(in_data((jj-l+1):jj,2));
         var_int = var(in_data((jj-l+1):jj,2));
         for(kk=(jj-l+1):jj)
-            if ((in_data(kk)-mid_int)/sqrt(var_int)>5)
-                in_data(kk) = mid_int;
+            if ((in_data(kk,2)-mid_int)/sqrt(var_int)>5)
+                in_data(kk,2) = mid_int;
             end
         end
     end
