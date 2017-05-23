@@ -3,14 +3,13 @@ clear;
 clc;
 
 % dirPath = 'C:\Users\Oryair\Desktop\Workarea\ECG\ECG_ELEC_POTL_II_250hz\';
-dirPath = 'C:\Users\User\Documents\project\DATA\ECG_ELEC_POTL_II_250hz/';
+dirPath = 'C:\Users\User\Documents\project\DATA\ECG_ELEC_POTL_II_250hz_cleaned/';
 Files   = dir([dirPath, '*.csv']);
 L       = length(Files);
 
 figure;
 for ii = 1 : L
     fileName = Files(ii).name;
-    if strcmp(fileName, 'ECG_ELEC_POTL_II_250hz_part_10000001.csv');
     mX       = csvread([dirPath, fileName]);
     ecgsig   = mX(:,2);
     tm       = mX(:,1);
@@ -37,5 +36,4 @@ for ii = 1 : L
     title(fileName); 
      drawnow; pause(0.3); %keyboard;
     hold off;
-    end
 end
