@@ -4,7 +4,7 @@ function [ ] = clean_artifacts( in_data, fileName )
 %% setting nulls for not informative measurements
     
     start = 1; % start of possible informative section of data
-    thresh_count = 50;
+    thresh_count = 150; %50 for ecg 250 Hz
     safe_bound = 1300;
     prev_val = in_data(1,2);
     count = 1;
@@ -48,6 +48,7 @@ function [ ] = clean_artifacts( in_data, fileName )
          name = sprintf('%s_%d.csv', fileName(1:end-4), start);
          dlmwrite(name, in_data_part, 'delimiter', ',', 'precision', 13);
     end
+%% extra cleaning for special case in BP
 
 end
 

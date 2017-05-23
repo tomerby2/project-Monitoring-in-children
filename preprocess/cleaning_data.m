@@ -2,7 +2,7 @@ close all;
 clear;
 clc;
 
-dirPath = 'C:\Users\ifatabr\Desktop\ECG_ELEC_POTL_II_250hz\';
+dirPath = 'C:\Users\User\Documents\project\DATA\MDC_PULS_OXIM_PLETH\';
 Files   = dir([dirPath, '*.csv']);
 L       = length(Files);
 for ii = 1 : L
