@@ -5,7 +5,7 @@ close all
 clear;
 clc;
 
-dirPath = 'C:\Users\User\Documents\project\DATA\ECG_ELEC_POTL_II_250hz_cleaned/';
+dirPath = 'C:\Users\User\Documents\project\DATA\ECG_ELEC_POTL_II_250hz/';
 Files   = dir([dirPath, '*.csv']);
 L       = length(Files);
 
