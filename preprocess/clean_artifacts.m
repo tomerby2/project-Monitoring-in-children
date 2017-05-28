@@ -70,7 +70,7 @@ function [ ] = clean_artifacts( in_data, fileName )
             count = count + 1 ;
         else 
                 if (count > thresh_count) % cut section of const value
-                    begin = max (jj-count-safe_bound,1); % begin of const value
+                    begin = max (jj-count-safe_bound,1,start); % begin of const value
                     final = min(jj+safe_bound,L); % final of const value
                     if start + safe_bound < begin
                         in_data_part = in_data(start:begin,1:2);

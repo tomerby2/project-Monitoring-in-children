@@ -5,7 +5,7 @@ close all
 clear;
 clc;
 
-dirPath = 'C:\Users\User\Documents\project\DATA\ECG_ELEC_POTL_II_250hz/';
+dirPath = 'C:\Users\User\Documents\project\clean data\ECG_ELEC_POTL_II_250hz_cleaned\';
 Files   = dir([dirPath, '*.csv']);
 L       = length(Files);
 
@@ -33,6 +33,6 @@ for ii       = 1 : L
     plot(locs,y(locs), 'ro'); hold off;
     
     title(fileName); 
-    drawnow; pause(0.3); %keyboard;
+    drawnow; pause(0.2); %keyboard;
     hold off;
 end
