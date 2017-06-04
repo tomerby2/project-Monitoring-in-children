@@ -1,88 +1,124 @@
+close all;
+clear;
+clc;
 
-
-    dirPath             = 'C:\Users\User\Documents\project\clean data\ECG_ELEC_POTL_II_250hz_cleaned\';
-    Files               = dir([dirPath, '*.csv']);
-    L                   = length(Files);
-    cut_info            = zeros(L,6);
-    histograms          = zeros(L,99);
-    N                   = 100000;
-    abs_F               = zeros(L,N/10);
+    dirPath_wave        = 'C:\Users\User\Documents\project\clean data\ECG_ELEC_POTL_II_250hz_cleaned\';
+    Files_wave          = dir([dirPath_wave, '*.csv']);
+    dirPath_RR          = 'C:\Users\User\Documents\project\clean data\RR_diffs_ECG_250hz\';
+    Files_RR            = dir([dirPath_RR, '*.csv']);
+    L                   = length(Files_wave);
+    
     % cut_info = [section start time , section end time, normalized start time,
     % normalized end time, average beat rate, varience of beat rate]
+    cut_info            = zeros(L,8);
+    histograms_wave     = zeros(L,99);
+    histograms_RR       = zeros(L,99);
+    N                   = 2^10;
+    abs_F               = zeros(L,N);
+    
     for ii = 1 : L
-        fileName        = Files(ii).name;
-        mX              = csvread([dirPath, fileName]);
+    % reading wave    
+        fileName_wave   = Files_wave(ii).name;
+        mX              = csvread([dirPath_wave, fileName_wave]);
         ecgsig          = mX(:,2);
         tm              = mX(:,1);
-    %% find RR wave
-        wt              = modwt(ecgsig,5);
-        wtrec           = zeros(size(wt));
-        wtrec(4:5,:)    = wt(4:5,:);
-        y               = imodwt(wtrec,'sym4');
-        y               = abs(y).^2;
-        [ypeaks,ylocs]  = findpeaks(y,'MinPeakHeight', mean(y), 'MinPeakDistance', 1);
-        [qrspeaks,locs] = findpeaks(y,'MinPeakHeight', mean(ypeaks)/2, 'MinPeakDistance', 1);
-        rr_locs         = tm(locs(ecgsig(locs)> mean(ecgsig)));
+    % find RR wave
+        fileName_RR     = Files_RR(ii).name;
+        RR_diffs        = csvread([dirPath_RR, fileName_RR]);
+
     %% find average and variance of RR distances
-        RR_diffs        =  diff(rr_locs);
-        cut_info(ii,:)  = [tm(1), tm(end), 0, 0, 60/mean(RR_diffs), 60/var(RR_diffs)]; % beats per minute
-    %% creating matrix with histogram rows
-        edges               = linspace(7300,9100,100);
-        histograms(ii,:)    = histcounts(ecgsig,edges)/length(ecgsig); 
+        cut_info(ii,:)  = [tm(1), tm(end), 0, 0, 60/mean(RR_diffs), 60/var(RR_diffs), 60/max(RR_diffs), 60/min(RR_diffs)]; % beats per minute
+        
+    %% creating matrix with histogram rows for wave
+        edges                   = linspace(7300,9100,100);
+        histograms_wave(ii,:)   = histcounts(ecgsig,edges)/length(ecgsig); 
+        
+    %% creating matrix with histogram rows for RR   
+        edges               = linspace(0.3,1.2,100);
+        histograms_RR(ii,:) = histcounts(RR_diffs,edges)/length(RR_diffs); 
+        
     %% creating matrix with fourier rows
-        if length(ecgsig) > 10000 % do not take very short sections
-            ecgsig_ds       = downsample(ecgsig,10);
-            abs_F(ii,:)     =  abs(fft(ecgsig,N/10))';
-        end
+            abs_F(ii,:)     =  abs(fft(ecgsig-mean(ecgsig),N))';
+            
     end
+    %% show histograms
+%     figure;
+%     for kk=1:length(histograms_RR)
+%         bar(histograms_RR(kk,:));
+%         pause(0.3);
+%     end
     %% sort the files according to time
     [~,index]               = sort(cut_info(:,1),'ascend');
+    
     temp_info               = cut_info;
     cut_info                = temp_info(index,:);
     
-    temp_hist               = histograms;
-    histograms              = temp_hist(index,:);
+    temp_hist               = histograms_wave;
+    histograms_wave         = temp_hist(index,:);
     
+    temp_hist               = histograms_RR;
+    histograms_RR           = temp_hist(index,:);
+       
     F_tmp                   = abs_F;
-    abs_F                   = F_tmp(index,:);
-    abs_F(~any(abs_F,2),:)  = [];
+    abs_F                   = F_tmp(index,1:N/2);
     
     % normalization & units
     cut_info(:,3)       = (cut_info(:,1)-cut_info(1,1))/3600; % normalize by first sample
     cut_info(:,4)       = (cut_info(:,2)-cut_info(1,1))/3600; % and change units to hours
-    %% diffusion map on histograms 
-    mDist   = squareform(pdist(histograms));
-    epsilon = 1 * median(mDist(:));
-    K       = exp(-mDist.^2 / epsilon.^2);
-    A       = bsxfun(@rdivide, K, sum(K, 2));
-
-    [EigVec_h, EigVal_h] = eig(A);
-      
+    %% diffusion map on histograms wave 
+    [EigVec_h_wave, EigVal_h_wave] = diffusion_map(histograms_wave, 1);
+    
+    %% diffusion map on histograms RR 
+    [EigVec_h_RR, EigVal_h_RR] = diffusion_map(histograms_RR, 2);
+          
     %% diffusion map on abs fft
-    mDist_f     = squareform(pdist(abs_F(:,1:100)')); 
-    epsilon_f   = 1 * median(mDist_f(:));
-    K_f         = exp(-mDist_f.^2 / epsilon_f.^2);
-    A_f         = bsxfun(@rdivide, K_f, sum(K_f, 2));
-
-    [EigVec_f, EigVal_f] = eig(A_f);
+    [EigVec_f, EigVal_f] = diffusion_map(abs_F, 1);
+     
+    %% diffusion map on mean & var & max & min
+    [EigVec, EigVal] = diffusion_map(cut_info(:,5:8), 1);
+    
     %% plot average heart rate
     figure; hold on; title('average heart rate in cut (about 7 minutes) from ECG 250Hz');
     xlabel('time [hour]'); 
     ylabel('beats per minute'); 
-    plot(mean(cut_info(:,3:4),2), cut_info(:,5), 'LineWidth', 2); 
+    plot(mean(cut_info(:,3:4),2), cut_info(:,5), 'LineWidth', 1); 
     set(gca, 'FontSize', 24); 
+    grid on;
     hold off;
     
-    %% plotting diffusion map of histograms
-    figure; scatter3(EigVec_h(:,2), EigVec_h(:,3), EigVec_h(:,4), 100, mean(cut_info(:,3:4),2) ,'Fill'); colorbar;
-    title('diffusion map of histograms');
+    %% plotting diffusion map of histograms wave
+    figure; hold on; scatter3(EigVec_h_wave(:,2), EigVec_h_wave(:,3), EigVec_h_wave(:,4), 100, mean(cut_info(:,3:4),2) ,'Fill'); colorbar;
+    title('diffusion map on histograms of the full wave ');
     xlabel('\psi_2');
     ylabel('\psi_3');
     zlabel('\psi_4');
-   
+    set(gca, 'FontSize', 24); 
+    grid on;
+    hold off;
+    %% plotting diffusion map of histograms RR
+    figure; hold on; scatter3(EigVec_h_RR(:,2), EigVec_h_RR(:,3), EigVec_h_RR(:,4), 100, mean(cut_info(:,3:4),2) ,'Fill'); colorbar;
+    title('diffusion map on histograms of the RR distances');
+    xlabel('\psi_2');
+    ylabel('\psi_3');
+    zlabel('\psi_4');
+    set(gca, 'FontSize', 24);
+    grid on;
+    hold off;
     %% plotting diffusion map of abs fft
-    figure; scatter3(EigVec_f(:,2), EigVec_f(:,3), EigVec_f(:,4), 100 ,mean(cut_info(1:667,3:4),2), 'Fill'); colorbar;
+    figure; hold on; scatter3(EigVec_f(:,2), EigVec_f(:,3), EigVec_f(:,4), 100 ,mean(cut_info(:,3:4),2), 'Fill'); colorbar;
     title('diffusion map of abs fft');
     xlabel('\psi_2');
     ylabel('\psi_3');
     zlabel('\psi_4');
+    set(gca, 'FontSize', 24); 
+    grid on;
+    hold off;
+    %% plotting diffusion map of mean & var & max & min
+    figure; hold on; scatter3(EigVec(:,2), EigVec(:,3), EigVec(:,4), 100 ,mean(cut_info(:,3:4),2), 'Fill'); colorbar;
+    title('diffusion map of mean & var & max & min');
+    xlabel('\psi_2');
+    ylabel('\psi_3');
+    zlabel('\psi_4');
+    set(gca, 'FontSize', 24); 
+    grid on;
+    hold off;
