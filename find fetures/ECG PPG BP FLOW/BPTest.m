@@ -5,7 +5,7 @@ close all
 clear;
 clc;
 
-dirPath = 'C:\Users\ifatabr\Desktop\project-Monitoring-in-children\preprocess\';
+dirPath = 'C:\Users\User\Documents\project\DATA\AWAY_CO2\';
 Files   = dir([dirPath, '*.csv']);
 L       = length(Files);
 

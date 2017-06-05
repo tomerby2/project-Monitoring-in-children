@@ -20,7 +20,7 @@ for ii = 1 : L
     [ypeaks,~]      = findpeaks(y, 'MinPeakHeight', mean(y), 'MinPeakDistance', 1);
     [~,locs]        = findpeaks(y, 'MinPeakHeight', mean(ypeaks)/2, 'MinPeakDistance', 1);
     rr_locs         = tm(locs(ecgsig(locs)> mean(ecgsig)));
-    RR_diffs        = [diff(rr_locs)];
+    RR_diffs        = diff(rr_locs);
     name            = ['C:\Users\User\Documents\project\clean data\RR_diffs_ECG_250hz\RR_', fileName];
     dlmwrite(name, RR_diffs, 'delimiter', ',', 'precision', 13);
     
