@@ -5,7 +5,7 @@ close all
 clear;
 clc;
 
-dirPath = 'C:\Users\User\Documents\project\DATA\MDC_PULS_OXIM_PLETH_cleaned/';
+dirPath = 'C:\Users\User\Documents\project\clean data\MDC_PULS_OXIM_PLETH_cleaned/';
 Files   = dir([dirPath, '*.csv']);
 L       = length(Files);
 
@@ -22,6 +22,6 @@ for ii       = 1 : L
     plot(tm(locs), PPGsig(locs), 'ro'); hold off;
     
     title(fileName); 
-    drawnow; pause(0.3); %keyboard;
+    drawnow; pause(0.5); %keyboard;
     hold off;
 end

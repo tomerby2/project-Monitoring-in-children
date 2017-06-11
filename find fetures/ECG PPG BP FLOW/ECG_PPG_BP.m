@@ -15,4 +15,5 @@ plot(mean(cut_info_ecg(:,3:4),2), cut_info_ecg(:,5), 'LineWidth', 2);
 plot(mean(cut_info_ppg(:,3:4),2), cut_info_ppg(:,5), 'LineWidth', 2); 
 plot(mean(cut_info_BP(:,3:4),2), cut_info_BP(:,5), 'LineWidth', 2);
 legend('ECG', 'PPG', 'BP');
+set(gca, 'FontSize', 24);
 hold off;

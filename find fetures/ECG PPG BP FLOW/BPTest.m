@@ -5,7 +5,7 @@ close all
 clear;
 clc;
 
-dirPath = 'C:\Users\User\Documents\project\DATA\AWAY_CO2\';
+dirPath = 'C:\Users\User\Documents\project\clean data\MDC_PRESS_BLD_ART_ABP_cleaned\';
 Files   = dir([dirPath, '*.csv']);
 L       = length(Files);
 
@@ -26,6 +26,6 @@ for ii       = 1 : L
     plot(tm(min_locs), BPsig(min_locs), 'go'); hold off; %min
     
     title(fileName); 
-    drawnow; pause(0.3); %keyboard;
+    drawnow; pause(0.5); %keyboard;
     hold off;
 end
