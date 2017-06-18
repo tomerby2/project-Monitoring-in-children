@@ -5,7 +5,7 @@ close all
 clear;
 clc;
 
-dirPath = 'C:\Users\User\Documents\project\clean data\ECG_ELEC_POTL_II_250hz_cleaned\';
+dirPath = 'C:\Users\User\Documents\project\removed data\ECG_removed\';
 Files   = dir([dirPath, '*.csv']);
 L       = length(Files);
 
@@ -26,13 +26,13 @@ for ii       = 1 : L
     [qrspeaks,locs] = findpeaks(y,'MinPeakHeight', mean(ypeaks)/2, 'MinPeakDistance', 1);
     rr_locs         = locs(ecgsig(locs)> mean(ecgsig));
      
-    subplot(1,2,1); 
-    plot(tm, ecgsig); hold on;
-    plot(tm(rr_locs), ecgsig(rr_locs), 'ro'); hold off;
-    subplot(1,2,2); plot(y); hold on;
-    plot(locs,y(locs), 'ro'); hold off;
+%     subplot(1,2,1); 
+    plot(tm, ecgsig,'linewidth',1.5); xlabel('time'); ylabel('amplitude'); set(gca, 'FontSize', 24); grid on; hold on;
+%     plot(tm(rr_locs), ecgsig(rr_locs), 'ro'); grid on;   hold off;
+%     subplot(1,2,2); plot(y); hold on;
+%     plot(locs,y(locs), 'ro'); hold off;
     
     title(fileName); 
-    drawnow; pause(0.2); %keyboard;
+    drawnow; pause(1); %keyboard;
     hold off;
 end

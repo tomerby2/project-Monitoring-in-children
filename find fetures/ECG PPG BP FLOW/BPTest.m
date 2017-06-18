@@ -5,7 +5,7 @@ close all
 clear;
 clc;
 
-dirPath = 'C:\Users\User\Documents\project\clean data\MDC_PRESS_BLD_ART_ABP_cleaned\';
+dirPath = 'C:\Users\User\Documents\project\removed data\BP_removed\';
 Files   = dir([dirPath, '*.csv']);
 L       = length(Files);
 
@@ -21,11 +21,11 @@ for ii       = 1 : L
     
     ave_PP           = mean(BPmax)-mean(abs(BPmin));%average peak to peak
     
-    plot(tm, [BPsig, ones(size(tm))*(1.8*ave_PP+mean(abs(BPmin))) ]); hold on;
-    plot(tm(max_locs), BPsig(max_locs), 'ro'); hold on;  %max
-    plot(tm(min_locs), BPsig(min_locs), 'go'); hold off; %min
+    plot(tm, BPsig,'linewidth',1.5); xlabel('time'); ylabel('amplitude'); set(gca, 'FontSize', 24); grid on; hold on;
+%     plot(tm(max_locs), BPsig(max_locs), 'ro'); hold on;  %max
+%     plot(tm(min_locs), BPsig(min_locs), 'go'); hold off; %min
     
     title(fileName); 
-    drawnow; pause(0.5); %keyboard;
+    drawnow; pause(1); %keyboard;
     hold off;
 end

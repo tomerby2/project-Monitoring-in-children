@@ -5,7 +5,7 @@ close all
 clear;
 clc;
 
-dirPath = 'C:\Users\User\Documents\project\clean data\MDC_PULS_OXIM_PLETH_cleaned/';
+dirPath = 'C:\Users\User\Documents\project\removed data\PPG_removed/';
 Files   = dir([dirPath, '*.csv']);
 L       = length(Files);
 
@@ -18,10 +18,10 @@ for ii       = 1 : L
 
     [PPGpeaks,locs] = findpeaks(PPGsig, 'MinPeakHeight', mean(PPGsig), 'MinPeakDistance', 40);
     
-    plot(tm, PPGsig); hold on;
-    plot(tm(locs), PPGsig(locs), 'ro'); hold off;
+    plot(tm, PPGsig,'linewidth',1.5); xlabel('time'); ylabel('amplitude'); set(gca, 'FontSize', 24); grid on; hold on;
+%     plot(tm(locs), PPGsig(locs), 'ro'); hold off;
     
     title(fileName); 
-    drawnow; pause(0.5); %keyboard;
+    drawnow; pause(1); %keyboard;
     hold off;
 end

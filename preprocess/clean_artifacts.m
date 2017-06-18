@@ -71,10 +71,10 @@ function [ ] = clean_artifacts( in_data, fileName )
                     if start + safe_bound < begin
                         in_data_part = in_data(start:begin,1:2);
                         in_data_part = std_filter(in_data_part,L);
-                        %dlmwrite(name,in_data(begin:final,1:2),'delimiter',',','precision',13);
-                        dlmwrite(name,in_data_part,'delimiter',',','precision',13)
-%                     else % do not forget!!!
-%                          dlmwrite(name,in_data(start:final,1:2),'delimiter',',','precision',13);
+                        dlmwrite(name,in_data(begin:final,1:2),'delimiter',',','precision',13);
+%                         dlmwrite(name,in_data_part,'delimiter',',','precision',13)
+                    else % do not forget!!!
+                         dlmwrite(name,in_data(start:final,1:2),'delimiter',',','precision',13);
                      end
                     
                     start = final+1;
@@ -91,7 +91,7 @@ function [ ] = clean_artifacts( in_data, fileName )
                in_data_part = in_data(start:jj-1,1:2);
                in_data_part = std_filter(in_data_part,L);
                name = sprintf('%s_%d.csv', fileName(1:end-4), start);
-               dlmwrite(name,in_data_part,'delimiter',',','precision',13);
+%                dlmwrite(name,in_data_part,'delimiter',',','precision',13);
                start = jj+1;
                continue
         end
@@ -104,21 +104,21 @@ function [ ] = clean_artifacts( in_data, fileName )
             in_data_part = in_data(start:begin,1:2);
             in_data_part = std_filter(in_data_part,L);
             name = sprintf('%s_%d.csv', fileName(1:end-4), start);
-            %dlmwrite(name,in_data(begin:end,1:2),'delimiter',',','precision',13);
-            dlmwrite(name, in_data_part, 'delimiter', ',', 'precision', 13);
+            dlmwrite(name,in_data(begin:end,1:2),'delimiter',',','precision',13);
+%             dlmwrite(name, in_data_part, 'delimiter', ',', 'precision', 13);
         end
     elseif count_BP > thresh_BP % if file ends with special case of blood pressure
                 begin = max (jj_start-safe_bound_BP,1); 
                 in_data_part = in_data(start:begin,1:2);
                 in_data_part = std_filter(in_data_part,L);
                 name = sprintf('%s_%d.csv', fileName(1:end-4), start);
-                %dlmwrite(name,in_data(begin:end,1:2),'delimiter',',','precision',13);
-                dlmwrite(name,in_data_part,'delimiter',',','precision',13)
+                dlmwrite(name,in_data(begin:end,1:2),'delimiter',',','precision',13);
+%                 dlmwrite(name,in_data_part,'delimiter',',','precision',13)
     else % if file does not end with const value or special case of blood pressure
          in_data_part = in_data(start:end,1:2);
          in_data_part = std_filter(in_data_part,L);
          name = sprintf('%s_%d.csv', fileName(1:end-4), start);
-         dlmwrite(name, in_data_part, 'delimiter', ',', 'precision', 13);
+%          dlmwrite(name, in_data_part, 'delimiter', ',', 'precision', 13);
     end
 
 end

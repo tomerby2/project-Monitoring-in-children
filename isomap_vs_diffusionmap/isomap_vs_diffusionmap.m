@@ -27,24 +27,27 @@ k = 10;
    [EigVec, EigVal] = eig(A);
 %% plot
 
-figure; scatter3(x(:), y(:), z(:), 100, z, 'Fill'); colorbar;
+figure; scatter3(x(:), y(:), z(:), 100, z, 'Fill'); c=colorbar;
     title('sphere upper half');
     xlabel('x');
     ylabel('y');
     zlabel('z');
+    c.Label.String = 'z';
     set(gca, 'FontSize', 24);
     
-figure; scatter3(mappedX(:,1),mappedX(:,2), mappedX(:,3), 100, z, 'Fill'); colorbar;
+figure; scatter3(mappedX(:,1),mappedX(:,2), mappedX(:,3), 100, z, 'Fill'); c=colorbar;
     title('isomap of sphere upper half');
     xlabel('x');
     ylabel('y');
     zlabel('z');
+    c.Label.String = 'z';
     set(gca, 'FontSize', 24);
 
-figure; scatter3(EigVec(:,2), EigVec(:,3), EigVec(:,4), 100, z, 'Fill'); colorbar;
+figure; scatter3(EigVec(:,2), EigVec(:,3), EigVec(:,4), 100, z, 'Fill'); c=colorbar;
     title('diffusion map of sphere upper half');
-    xlabel('\psi_2');
-    ylabel('\psi_3');
-    zlabel('\psi_4');
+    xlabel('\psi_1');
+    ylabel('\psi_2');
+    zlabel('\psi_3');
+    c.Label.String = 'z';
     set(gca, 'FontSize', 24);
 

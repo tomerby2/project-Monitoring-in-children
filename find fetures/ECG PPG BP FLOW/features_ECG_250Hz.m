@@ -34,7 +34,7 @@ clc;
         histograms_wave(ii,:)   = histcounts(ecgsig,edges)/length(ecgsig); 
         
     %% creating matrix with histogram rows for RR   
-        edges               = linspace(0.3,1.2,100);
+        edges               = linspace(0.55,0.75,100);
         histograms_RR(ii,:) = histcounts(RR_diffs,edges)/length(RR_diffs); 
         
     %% creating matrix with fourier rows

@@ -1,5 +1,5 @@
 close all;
-clear;
+% clear;
 clc;
 
     dirPath  = 'C:\Users\User\Documents\project\clean data\MDC_PRESS_BLD_ART_ABP_cleaned\';

@@ -44,8 +44,8 @@ clc;
     
     %% show histograms
 %     figure;
-%     for kk=1:length(histograms_RR)
-%         bar(histograms_RR(kk,:));
+%     for kk=1:length(histograms_cyc)
+%         bar(histograms_cyc(kk,:));
 %         pause(0.3);
 %     end
     %% sort the files according to time

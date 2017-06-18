@@ -1,5 +1,5 @@
 close all;
-clear;
+% clear;
 clc;
 
     dirPath  = 'C:\Users\User\Documents\project\clean data\MDC_PULS_OXIM_PLETH_cleaned\';
@@ -116,7 +116,7 @@ clc;
     hold off;
     %% plotting diffusion map of histograms peaks colored according to "steps" in mean breaths
     figure; hold on; scatter3(EigVec_h_peaks(1:340,2), EigVec_h_peaks(1:340,3), EigVec_h_peaks(1:340,4), 100, cut_info(1:340,9) ,'Fill'); c=colorbar;
-    title('diffusion map on histograms of the RR distances');
+    title('diffusion map on histograms of the peaks distances');
     xlabel('\psi_2');
     ylabel('\psi_3');
     zlabel('\psi_4');
