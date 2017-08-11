@@ -5,7 +5,7 @@ close all
 clear;
 clc;
 
-dirPath = 'C:\Users\User\Documents\project\removed data\ECG_removed\';
+dirPath = 'C:\Users\Ifat Abramovich\Documents\?????? ?\new data\0000135_1488570053096\';
 Files   = dir([dirPath, '*.csv']);
 L       = length(Files);
 
