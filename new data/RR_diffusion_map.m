@@ -1,3 +1,5 @@
+% diffusion map on RR distances (one file)
+
 close all;
 clear;
 clc;
