@@ -5,8 +5,8 @@ close all
 clear;
 clc;
 
-dirPath = 'C:\Users\Ifat Abramovich\Documents\project\new data\0000135_1488712397544\';
-fileName = '0000135_1488712397544_MDC_ECG_ELEC_POTL_I.csv';     
+dirPath = 'C:\Users\Ifat Abramovich\Documents\project\new data\0000150_1496373935344\';
+fileName = '0000150_1496373935344_MDC_ECG_ELEC_POTL_II.csv';     
 mX       = csvread([dirPath, fileName]);
 ecgsig   = mX(:,2);
 tm       = mX(:,1);
