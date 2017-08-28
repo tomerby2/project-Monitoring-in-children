@@ -4,7 +4,7 @@ clc;
 
     dirPath_wave        = 'C:\Users\User\Documents\project\clean data\ECG_ELEC_POTL_II_250hz_cleaned\';
     Files_wave          = dir([dirPath_wave, '*.csv']);
-    dirPath_RR          = 'C:\Users\User\Documents\project\clean data\RR_diffs_ECG_250hz\';
+    dirPath_RR          = 'C:\Users\User\Documents\project\new clean data\RR_diffs_ECG_142\';
     Files_RR            = dir([dirPath_RR, '*.csv']);
     L                   = length(Files_wave);
     
@@ -30,11 +30,11 @@ clc;
         cut_info(ii,:)  = [tm(1), tm(end), 0, 0, 60/mean(RR_diffs), 60/var(RR_diffs), 60/max(RR_diffs), 60/min(RR_diffs),0]; % beats per minute
         
     %% creating matrix with histogram rows for wave
-        edges                   = linspace(7300,9100,100);
+        edges                   = linspace(7600,8800,100);
         histograms_wave(ii,:)   = histcounts(ecgsig,edges)/length(ecgsig); 
         
     %% creating matrix with histogram rows for RR   
-        edges               = linspace(0.55,0.75,100);
+        edges               = linspace(0.45,0.75,100);
         histograms_RR(ii,:) = histcounts(RR_diffs,edges)/length(RR_diffs); 
         
     %% creating matrix with fourier rows
@@ -42,7 +42,7 @@ clc;
             
     end
     
-    %% show histograms
+%     %% show histograms
 %     figure;
 %     for kk=1:length(histograms_RR)
 %         bar(histograms_RR(kk,:));
@@ -95,9 +95,9 @@ clc;
     %% plotting diffusion map of histograms wave colored according to time
     figure; hold on; scatter3(EigVec_h_wave(:,2), EigVec_h_wave(:,3), EigVec_h_wave(:,4), 100, mean(cut_info(:,3:4),2) ,'Fill'); c=colorbar;
     title('diffusion map on histograms of the full wave ');
-    xlabel('\psi_2');
-    ylabel('\psi_3');
-    zlabel('\psi_4');
+    xlabel('\psi_1');
+    ylabel('\psi_2');
+    zlabel('\psi_3');
     c.Label.String = 'time';
     set(gca, 'FontSize', 24); 
     grid on;
@@ -105,9 +105,9 @@ clc;
     %% plotting diffusion map of histograms wave colored according to "steps" in mean breaths
     figure; hold on; scatter3(EigVec_h_wave(1:557,2), EigVec_h_wave(1:557,3), EigVec_h_wave(1:557,4), 100, cut_info(1:557,9) ,'Fill'); c=colorbar;
     title('diffusion map on histograms of the full wave ');
-    xlabel('\psi_2');
-    ylabel('\psi_3');
-    zlabel('\psi_4');
+    xlabel('\psi_1');
+    ylabel('\psi_2');
+    zlabel('\psi_3');
     c.Label.String = 'step';
     set(gca, 'FontSize', 24); 
     grid on;
@@ -115,9 +115,9 @@ clc;
     %% plotting diffusion map of histograms RR colored according to time
     figure; hold on; scatter3(EigVec_h_RR(:,2), EigVec_h_RR(:,3), EigVec_h_RR(:,4), 100, mean(cut_info(:,3:4),2) ,'Fill'); c=colorbar;
     title('diffusion map on histograms of the RR distances');
-    xlabel('\psi_2');
-    ylabel('\psi_3');
-    zlabel('\psi_4');
+    xlabel('\psi_1');
+    ylabel('\psi_2');
+    zlabel('\psi_3');
     c.Label.String = 'time';
     set(gca, 'FontSize', 24);
     grid on;
@@ -125,9 +125,9 @@ clc;
     %% plotting diffusion map of histograms RR colored according to "steps" in mean breaths
     figure; hold on; scatter3(EigVec_h_RR(1:557,2), EigVec_h_RR(1:557,3), EigVec_h_RR(1:557,4), 100, cut_info(1:557,9) ,'Fill'); c=colorbar;
     title('diffusion map on histograms of the RR distances');
-    xlabel('\psi_2');
-    ylabel('\psi_3');
-    zlabel('\psi_4');
+    xlabel('\psi_1');
+    ylabel('\psi_2');
+    zlabel('\psi_3');
     c.Label.String = 'step';
     set(gca, 'FontSize', 24);
     grid on;
@@ -135,9 +135,9 @@ clc;
     %% plotting diffusion map of abs fft colored according to time
     figure; hold on; scatter3(EigVec_f(:,2), EigVec_f(:,3), EigVec_f(:,4), 100 ,mean(cut_info(:,3:4),2), 'Fill'); c=colorbar;
     title('diffusion map of abs fft');
-    xlabel('\psi_2');
-    ylabel('\psi_3');
-    zlabel('\psi_4');
+    xlabel('\psi_1');
+    ylabel('\psi_2');
+    zlabel('\psi_3');
     c.Label.String = 'time';
     set(gca, 'FontSize', 24); 
     grid on;
@@ -145,9 +145,9 @@ clc;
     %% plotting diffusion map of abs fft colored according to "steps" in mean breaths
     figure; hold on; scatter3(EigVec_f(1:557,2), EigVec_f(1:557,3), EigVec_f(1:557,4), 100 ,cut_info(1:557,9), 'Fill'); c=colorbar;
     title('diffusion map of abs fft');
-    xlabel('\psi_2');
-    ylabel('\psi_3');
-    zlabel('\psi_4');
+    xlabel('\psi_1');
+    ylabel('\psi_2');
+    zlabel('\psi_3');
     c.Label.String = 'step';
     set(gca, 'FontSize', 24); 
     grid on;
@@ -155,9 +155,9 @@ clc;
     %% plotting diffusion map of mean & var & max & min
     figure; hold on; scatter3(EigVec(:,2), EigVec(:,3), EigVec(:,4), 100 ,mean(cut_info(:,3:4),2), 'Fill'); colorbar;
     title('diffusion map of mean & var & max & min');
-    xlabel('\psi_2');
-    ylabel('\psi_3');
-    zlabel('\psi_4');
+    xlabel('\psi_1');
+    ylabel('\psi_2');
+    zlabel('\psi_3');
     set(gca, 'FontSize', 24); 
     grid on;
     hold off;

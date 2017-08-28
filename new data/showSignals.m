@@ -5,7 +5,11 @@ close all
 clear;
 clc;
 
+<<<<<<< Updated upstream
 dirPath = 'C:\Users\Ifat Abramovich\Documents\project\new data\0000142_1494541440032\';
+=======
+dirPath = 'C:\Users\User\Documents\project\DATA\new data\151\';
+>>>>>>> Stashed changes
 Files   = dir([dirPath, '*.csv']);
 L       = length(Files);
 
