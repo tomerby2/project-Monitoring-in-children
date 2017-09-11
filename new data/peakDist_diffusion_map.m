@@ -6,7 +6,7 @@ clc;
 
     %% read file
 
-    dirPath     = 'C:\Users\Ifat Abramovich\Documents\project\new data\0000142_1494541440032\';
+    dirPath     = 'C:\Users\User\Documents\project\DATA\new data\150\ECG_150\';
     fileName    = '0000142_1494541440032_MDC_PRESS_BLD_ART.csv';     
     mX          = csvread([dirPath, fileName]);
     sig         = mX(:,2);

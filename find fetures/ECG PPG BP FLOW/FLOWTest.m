@@ -5,8 +5,8 @@ close all
 clear;
 clc;
 
-% dirPath = 'C:\Users\User\Documents\project\clean data\FLOW_AWAY_cleaned\';
-dirPath = 'C:\Users\User\Documents\project\removed data\FLOW_AWAY_removed\';
+dirPath = 'C:\Users\User\Documents\project\clean data\FLOW_AWAY_cleaned\';
+%dirPath = 'C:\Users\User\Documents\project\removed data\FLOW_AWAY_removed\';
 Files   = dir([dirPath, '*.csv']);
 L       = length(Files);
 

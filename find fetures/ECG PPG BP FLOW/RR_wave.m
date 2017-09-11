@@ -3,7 +3,7 @@
 % calculate RR distances from ECG signal
 % using 'sym4' wavelet
 
-    dirPath             = 'C:\Users\User\Documents\project\clean data\ECG_ELEC_POTL_II_250hz_cleaned\';
+    dirPath             = 'C:\Users\User\Documents\project\DATA\new data\142\ECG_142\';
     Files               = dir([dirPath, '*.csv']);
     L                   = length(Files);
 
@@ -21,7 +21,7 @@ for ii = 1 : L
     [~,locs]        = findpeaks(y, 'MinPeakHeight', mean(ypeaks)/2, 'MinPeakDistance', 1);
     rr_locs         = tm(locs(ecgsig(locs)> mean(ecgsig)));
     RR_diffs        = diff(rr_locs);
-    name            = ['C:\Users\User\Documents\project\clean data\RR_diffs_ECG_250hz\RR_', fileName];
+    name            = ['C:\Users\User\Documents\project\new clean data\RR_diffs_ECG_142\RR_', fileName];
     dlmwrite(name, RR_diffs, 'delimiter', ',', 'precision', 13);
     
 end

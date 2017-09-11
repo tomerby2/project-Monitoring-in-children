@@ -5,7 +5,7 @@ close all
 clear;
 clc;
 
-dirPath = 'C:\Users\User\Documents\project\removed data\BP_removed\';
+dirPath = 'C:\Users\User\Documents\project\clean data\MDC_PRESS_BLD_ART_ABP_cleaned\';
 Files   = dir([dirPath, '*.csv']);
 L       = length(Files);
 

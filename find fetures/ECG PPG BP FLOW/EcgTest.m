@@ -5,7 +5,7 @@ close all
 clear;
 clc;
 
-dirPath = 'C:\Users\Ifat Abramovich\Documents\?????? ?\new data\0000135_1488570053096\';
+dirPath = 'C:\Users\User\Documents\project\clean data\ECG_ELEC_POTL_II_250hz_cleaned\';
 Files   = dir([dirPath, '*.csv']);
 L       = length(Files);
 
@@ -28,7 +28,7 @@ for ii       = 1 : L
      
 %     subplot(1,2,1); 
     plot(tm, ecgsig,'linewidth',1.5); xlabel('time'); ylabel('amplitude'); set(gca, 'FontSize', 24); grid on; hold on;
-%     plot(tm(rr_locs), ecgsig(rr_locs), 'ro'); grid on;   hold off;
+     plot(tm(rr_locs), ecgsig(rr_locs), 'ro'); grid on;   hold off;
 %     subplot(1,2,2); plot(y); hold on;
 %     plot(locs,y(locs), 'ro'); hold off;
     

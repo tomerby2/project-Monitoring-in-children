@@ -2,9 +2,9 @@ close all;
 clear;
 clc;
 
-    dirPath_wave        = 'C:\Users\User\Documents\project\clean data\ECG_ELEC_POTL_II_250hz_cleaned\';
+    dirPath_wave        = 'C:\Users\User\Documents\project\DATA\new data\150\ECG_150\';
     Files_wave          = dir([dirPath_wave, '*.csv']);
-    dirPath_RR          = 'C:\Users\User\Documents\project\new clean data\RR_diffs_ECG_142\';
+    dirPath_RR          = 'C:\Users\User\Documents\project\DATA\new data\150\RR_wave_ecg\';
     Files_RR            = dir([dirPath_RR, '*.csv']);
     L                   = length(Files_wave);
     
@@ -30,11 +30,11 @@ clc;
         cut_info(ii,:)  = [tm(1), tm(end), 0, 0, 60/mean(RR_diffs), 60/var(RR_diffs), 60/max(RR_diffs), 60/min(RR_diffs),0]; % beats per minute
         
     %% creating matrix with histogram rows for wave
-        edges                   = linspace(7600,8800,100);
+        edges                   = linspace(7500,8300,100);
         histograms_wave(ii,:)   = histcounts(ecgsig,edges)/length(ecgsig); 
         
     %% creating matrix with histogram rows for RR   
-        edges               = linspace(0.45,0.75,100);
+        edges               = linspace(0.35,0.8,100);
         histograms_RR(ii,:) = histcounts(RR_diffs,edges)/length(RR_diffs); 
         
     %% creating matrix with fourier rows
@@ -42,9 +42,9 @@ clc;
             
     end
     
-%     %% show histograms
+    %% show histograms
 %     figure;
-%     for kk=1:length(histograms_RR)
+%     for kk=1:length(histograms_wave)
 %         bar(histograms_RR(kk,:));
 %         pause(0.3);
 %     end
@@ -54,10 +54,15 @@ clc;
     temp_info               = cut_info;
     cut_info                = temp_info(index,:);
     % classification according to "steps" in mean breaths 
-    cut_info(1:204,9)   = 1;
-    cut_info(205:367,9) = 2;    
-    cut_info(368:496,9) = 1;
-    cut_info(497:557,9) = 3;
+%     cut_info(1:204,9)   = 1;
+%     cut_info(205:367,9) = 2;    
+%     cut_info(368:496,9) = 1;
+%     cut_info(497:557,9) = 3;
+
+    % classification according to end of midical breaths
+    cut_info(1:47,9)   = 0;
+    cut_info(48:end,9) = 1;  
+    
     
     temp_hist               = histograms_wave;
     histograms_wave         = temp_hist(index,:);
@@ -103,12 +108,22 @@ clc;
     grid on;
     hold off;
     %% plotting diffusion map of histograms wave colored according to "steps" in mean breaths
-    figure; hold on; scatter3(EigVec_h_wave(1:557,2), EigVec_h_wave(1:557,3), EigVec_h_wave(1:557,4), 100, cut_info(1:557,9) ,'Fill'); c=colorbar;
+%     figure; hold on; scatter3(EigVec_h_wave(1:557,2), EigVec_h_wave(1:557,3), EigVec_h_wave(1:557,4), 100, cut_info(1:557,9) ,'Fill'); c=colorbar;
+%     title('diffusion map on histograms of the full wave ');
+%     xlabel('\psi_1');
+%     ylabel('\psi_2');
+%     zlabel('\psi_3');
+%     c.Label.String = 'step';
+%     set(gca, 'FontSize', 24); 
+%     grid on;
+%     hold off;
+    %% plotting diffusion map of histograms wave colored according to end of midical breaths
+    figure; hold on; scatter3(EigVec_h_wave(:,2), EigVec_h_wave(:,3), EigVec_h_wave(:,4), 100, cut_info(:,9) ,'Fill'); c=colorbar;
     title('diffusion map on histograms of the full wave ');
     xlabel('\psi_1');
     ylabel('\psi_2');
     zlabel('\psi_3');
-    c.Label.String = 'step';
+    c.Label.String = 'with or without';
     set(gca, 'FontSize', 24); 
     grid on;
     hold off;
@@ -123,12 +138,22 @@ clc;
     grid on;
     hold off;
     %% plotting diffusion map of histograms RR colored according to "steps" in mean breaths
-    figure; hold on; scatter3(EigVec_h_RR(1:557,2), EigVec_h_RR(1:557,3), EigVec_h_RR(1:557,4), 100, cut_info(1:557,9) ,'Fill'); c=colorbar;
+%     figure; hold on; scatter3(EigVec_h_RR(1:557,2), EigVec_h_RR(1:557,3), EigVec_h_RR(1:557,4), 100, cut_info(1:557,9) ,'Fill'); c=colorbar;
+%     title('diffusion map on histograms of the RR distances');
+%     xlabel('\psi_1');
+%     ylabel('\psi_2');
+%     zlabel('\psi_3');
+%     c.Label.String = 'step';
+%     set(gca, 'FontSize', 24);
+%     grid on;
+%     hold off;
+    %% plotting diffusion map of histograms RR colored according to end of midical breaths
+    figure; hold on; scatter3(EigVec_h_RR(:,2), EigVec_h_RR(:,3), EigVec_h_RR(:,4), 100, cut_info(:,9) ,'Fill'); c=colorbar;
     title('diffusion map on histograms of the RR distances');
     xlabel('\psi_1');
     ylabel('\psi_2');
     zlabel('\psi_3');
-    c.Label.String = 'step';
+    c.Label.String = 'with or without';
     set(gca, 'FontSize', 24);
     grid on;
     hold off;
@@ -143,12 +168,22 @@ clc;
     grid on;
     hold off;
     %% plotting diffusion map of abs fft colored according to "steps" in mean breaths
-    figure; hold on; scatter3(EigVec_f(1:557,2), EigVec_f(1:557,3), EigVec_f(1:557,4), 100 ,cut_info(1:557,9), 'Fill'); c=colorbar;
+%     figure; hold on; scatter3(EigVec_f(1:557,2), EigVec_f(1:557,3), EigVec_f(1:557,4), 100 ,cut_info(1:557,9), 'Fill'); c=colorbar;
+%     title('diffusion map of abs fft');
+%     xlabel('\psi_1');
+%     ylabel('\psi_2');
+%     zlabel('\psi_3');
+%     c.Label.String = 'step';
+%     set(gca, 'FontSize', 24); 
+%     grid on;
+%     hold off;
+    %% plotting diffusion map of abs fft colored according to end of midical breaths
+    figure; hold on; scatter3(EigVec_f(:,2), EigVec_f(:,3), EigVec_f(:,4), 100 ,cut_info(:,9), 'Fill'); c=colorbar;
     title('diffusion map of abs fft');
     xlabel('\psi_1');
     ylabel('\psi_2');
     zlabel('\psi_3');
-    c.Label.String = 'step';
+    c.Label.String = 'with or without';
     set(gca, 'FontSize', 24); 
     grid on;
     hold off;

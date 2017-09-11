@@ -1,8 +1,8 @@
 step= 100000;
-FLOW_AWAY = csvread('D:\Users\tomerby2\Desktop\MDC_FLOW_AWAY.csv');
-[x,y]=size(FLOW_AWAY);
+ECG_150 = csvread('C:\Users\User\Documents\project\DATA\new data\150\0000150_1496373935344_MDC_ECG_ELEC_POTL_II.csv');
+[x,y]=size(ECG_150);
 for jj=1:step:x
-        FLOW_AWAY_part = FLOW_AWAY(jj:(min(jj+step-1,x)),1:2);
-        name = sprintf('FLOW_AWAY_part_%d.csv',jj);
-        dlmwrite(name,FLOW_AWAY_part,'delimiter',',','precision',13);
+        ECG_150_part = ECG_150(jj:(min(jj+step-1,x)),1:2);
+        name = sprintf('ECG_150_part_%d.csv',jj);
+        dlmwrite(name,ECG_150_part,'delimiter',',','precision',13);
 end

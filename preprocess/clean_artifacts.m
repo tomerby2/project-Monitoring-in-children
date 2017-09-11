@@ -71,8 +71,8 @@ function [ ] = clean_artifacts( in_data, fileName )
                     if start + safe_bound < begin
                         in_data_part = in_data(start:begin,1:2);
                         in_data_part = std_filter(in_data_part,L);
-                        dlmwrite(name,in_data(begin:final,1:2),'delimiter',',','precision',13);
-%                         dlmwrite(name,in_data_part,'delimiter',',','precision',13)
+%                         dlmwrite(name,in_data(begin:final,1:2),'delimiter',',','precision',13);
+                        dlmwrite(name,in_data_part,'delimiter',',','precision',13)
                     else % do not forget!!!
                          dlmwrite(name,in_data(start:final,1:2),'delimiter',',','precision',13);
                      end

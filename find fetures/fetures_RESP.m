@@ -2,10 +2,10 @@ close all;
 clear;
 clc;
 
-    dirPath_wave        = 'C:\Users\User\Documents\project\clean data\FLOW_AWAY_cleaned\';
+    dirPath_wave        = 'C:\Users\User\Documents\project\DATA\new data\150\RESP_150\';
     Files_wave          = dir([dirPath_wave, '*.csv']);
-    dirPath_cyc         = 'C:\Users\User\Documents\project\clean data\cyc_diffs_FLOW_AWAY\';
-    Files_cyc           = dir([dirPath_cyc, '*.csv']);
+    dirPath_cyc          = 'C:\Users\User\Documents\project\DATA\new data\150\cyc_RESP\';
+    Files_cyc            = dir([dirPath_cyc, '*.csv']);
     L                   = length(Files_wave);
     
     % cut_info = [section start time , section end time, normalized start time,
@@ -16,33 +16,33 @@ clc;
     N                   = 2^10;
     abs_F               = zeros(L,N);
     
-    for ii = 1 : L
+for ii = 1 : L
     % reading wave    
         fileName_wave   = Files_wave(ii).name;
         mX              = csvread([dirPath_wave, fileName_wave]);
-        FLOWsig          = mX(:,2);
+        sig             = mX(:,2);
         tm              = mX(:,1);
-    % find cycle
+    % find cyc wave
         fileName_cyc    = Files_cyc(ii).name;
-        cyc_diffs       = csvread([dirPath_cyc, fileName_cyc]);
+        cyc_diffs        = csvread([dirPath_cyc, fileName_cyc]);
 
-    %% find average and variance of cycle distances
+    %% find average and variance of RR distances
         cut_info(ii,:)  = [tm(1), tm(end), 0, 0, 60/mean(cyc_diffs), 60/var(cyc_diffs), 60/max(cyc_diffs), 60/min(cyc_diffs),0]; % breaths per minute
         
     %% creating matrix with histogram rows for wave
-        edges                   = linspace(1700,2300,100);
-        histograms_wave(ii,:)   = histcounts(FLOWsig,edges)/length(FLOWsig); 
+        edges                   = linspace(0,4100,100);
+        histograms_wave(ii,:)   = histcounts(sig,edges)/length(sig); 
         
     %% creating matrix with histogram rows for cyc   
-        edges               = linspace(1,4.5,100);
-        histograms_cyc(ii,:) = histcounts(cyc_diffs,edges)/length(cyc_diffs); 
+        edges                   = linspace(1.5,3,100);
+        histograms_cyc(ii,:)    = histcounts(cyc_diffs,edges)/length(cyc_diffs); 
         
     %% creating matrix with fourier rows
-            abs_F(ii,:)     =  abs(fft(FLOWsig-mean(FLOWsig),N))';
+            abs_F(ii,:)     =  abs(fft(sig-mean(sig),N))';
             
-    end
+end
     
-    %% show histograms
+ %% show histograms
 %     figure;
 %     for kk=1:length(histograms_cyc)
 %         bar(histograms_cyc(kk,:));
@@ -54,14 +54,19 @@ clc;
     temp_info               = cut_info;
     cut_info                = temp_info(index,:);
     
-    % classification according to "steps" in mean breaths 
-    cut_info(1:111,9)   = 1;
-    cut_info(112:200,9) = 2;    
-    cut_info(201:269,9) = 1;
-    cut_info(202:end,9) = 3;
+        % classification according to "steps" in mean breaths 
+%     cut_info(1:204,9)   = 1;
+%     cut_info(205:367,9) = 2;    
+%     cut_info(368:496,9) = 1;
+%     cut_info(497:557,9) = 3;
+
+    % classification according to end of midical breaths
+    cut_info(1:47,9)   = 0;
+    cut_info(48:end,9) = 1;  
+    
     % cut bad data
-    cut_info_complete       = cut_info;
-    cut_info                = cut_info_complete(1:310,:);
+%     cut_info_complete       = cut_info;
+%     cut_info                = cut_info_complete(1:310,:);
     
     
     temp_hist               = histograms_wave;
@@ -78,13 +83,13 @@ clc;
     cut_info(:,4)       = (cut_info(:,2)-cut_info(1,1))/3600; % and change units to hours
     
     %% diffusion map on histograms wave 
-    [EigVec_h_wave, EigVal_h_wave] = diffusion_map(histograms_wave(1:310,:), 1);
+    [EigVec_h_wave, EigVal_h_wave] = diffusion_map(histograms_wave, 1);
     
     %% diffusion map on histograms cyc 
-    [EigVec_h_cyc, EigVal_h_cyc] = diffusion_map(histograms_cyc(1:310,:), 1);
+    [EigVec_h_cyc, EigVal_h_cyc] = diffusion_map(histograms_cyc, 1);
           
     %% diffusion map on abs fft
-    [EigVec_f, EigVal_f] = diffusion_map(abs_F(1:310,:), 1);
+    [EigVec_f, EigVal_f] = diffusion_map(abs_F, 1);
      
     %% diffusion map on mean & var & max & min
     [EigVec, EigVal]            = diffusion_map(cut_info(:,5:8), 4);
@@ -93,18 +98,19 @@ clc;
     [EigVal_vec,EigVal_index]   = sort(EigVal_vec,'descend');
     temp                        = EigVec;
     EigVec                      = temp(EigVal_index,:);
+    
     %% plot average breathing rate
-    figure; hold on; title('average breath rate in cut (about 13 minutes) from FLOW AWAY');
+    figure; hold on; title('average breath rate in cut (5 minutes) from RESP');
     xlabel('time [hour]'); 
     ylabel('bearths per minute'); 
-    plot(mean(cut_info(:,3:4),2), cut_info(:,5), 'LineWidth', 1); 
+    plot(mean(cut_info(:,3:4),2), cut_info(:,5), 'LineWidth', 1.5); 
     set(gca, 'FontSize', 24); 
     grid on;
     hold off;
     
     %% plotting diffusion map of histograms wave colored according to time
     figure; hold on; scatter3(EigVec_h_wave(:,2), EigVec_h_wave(:,3), EigVec_h_wave(:,4), 100, mean(cut_info(:,3:4),2) ,'Fill'); c=colorbar;
-    title('diffusion map on histograms of the full FLOW AWAY wave');
+    title('diffusion map on histograms of the full RESP wave');
     xlabel('\psi_1');
     ylabel('\psi_2');
     zlabel('\psi_3');
@@ -112,19 +118,20 @@ clc;
     set(gca, 'FontSize', 24); 
     grid on;
     hold off;
-    %% plotting diffusion map of histograms wave colored according to "steps" in mean breaths
+    
+   %% plotting diffusion map of histograms wave colored according to end of midical breaths
     figure; hold on; scatter3(EigVec_h_wave(:,2), EigVec_h_wave(:,3), EigVec_h_wave(:,4), 100, cut_info(:,9) ,'Fill'); c=colorbar;
-    title('diffusion map on histograms of the full FLOW AWAY wave');
+    title('diffusion map on histograms of the full wave ');
     xlabel('\psi_1');
     ylabel('\psi_2');
     zlabel('\psi_3');
-    c.Label.String = 'step';
+    c.Label.String = 'with or without';
     set(gca, 'FontSize', 24); 
     grid on;
     hold off;
     %% plotting diffusion map of histograms cyc colored according to time
     figure; hold on; scatter3(EigVec_h_cyc(:,2), EigVec_h_cyc(:,3), EigVec_h_cyc(:,4), 100, mean(cut_info(:,3:4),2) ,'Fill'); c=colorbar;
-    title('diffusion map on histograms of the cyc distances of FLOW AWAY');
+    title('diffusion map on histograms of the cyc distances of RESP');
     xlabel('\psi_1');
     ylabel('\psi_2');
     zlabel('\psi_3');
@@ -132,19 +139,19 @@ clc;
     set(gca, 'FontSize', 24);
     grid on;
     hold off;
-    %% plotting diffusion map of histograms cyc colored according to "steps" in mean breaths
+    %% plotting diffusion map of histograms cyc colored according to end of midical breaths
     figure; hold on; scatter3(EigVec_h_cyc(:,2), EigVec_h_cyc(:,3), EigVec_h_cyc(:,4), 100, cut_info(:,9) ,'Fill'); c=colorbar;
-    title('diffusion map on histograms of the cyc distances of FLOW AWAY');
+    title('diffusion map on histograms of the cycles');
     xlabel('\psi_1');
     ylabel('\psi_2');
     zlabel('\psi_3');
-    c.Label.String = 'step';
+    c.Label.String = 'with or without';
     set(gca, 'FontSize', 24);
     grid on;
     hold off;
     %% plotting diffusion map of abs fft colored according to time
     figure; hold on; scatter3(EigVec_f(:,2), EigVec_f(:,3), EigVec_f(:,4), 100 ,mean(cut_info(:,3:4),2), 'Fill'); c=colorbar;
-    title('diffusion map of abs fft of FLOW AWAY');
+    title('diffusion map of abs fft of RESP');
     xlabel('\psi_1');
     ylabel('\psi_2');
     zlabel('\psi_3');
@@ -152,32 +159,34 @@ clc;
     set(gca, 'FontSize', 24); 
     grid on;
     hold off;
-      %% plotting diffusion map of abs fft colored according to "steps" in mean breath
+      
+  %% plotting diffusion map of abs fft colored according to end of midical breaths
     figure; hold on; scatter3(EigVec_f(:,2), EigVec_f(:,3), EigVec_f(:,4), 100 ,cut_info(:,9), 'Fill'); c=colorbar;
-    title('diffusion map of abs fft of FLOW AWAY');
+    title('diffusion map of abs fft');
     xlabel('\psi_1');
     ylabel('\psi_2');
     zlabel('\psi_3');
-    c.Label.String = 'step';
+    c.Label.String = 'with or without';
     set(gca, 'FontSize', 24); 
     grid on;
     hold off;
     %% plotting diffusion map of mean & var & max & min colored according to time
     figure; hold on; scatter3(EigVec(:,6), EigVec(:,7), EigVec(:,8), 100 ,mean(cut_info(:,3:4),2), 'Fill'); c=colorbar;
-    title('diffusion map of mean & var & max & min of FLOW AWAY');
+    title('diffusion map of mean & var & max & min of RESP');
     xlabel('\psi_1');
     ylabel('\psi_2');
     zlabel('\psi_3');
     c.Label.String = 'time';
     set(gca, 'FontSize', 24); 
     grid on;
+    
     %% plotting diffusion map of mean & var & max & min colored according to "steps" in mean breath
-    figure; hold on; scatter3(EigVec(:,6), EigVec(:,8), EigVec(:,8), 100 ,cut_info(:,9), 'Fill'); c=colorbar;
-    title('diffusion map of mean & var & max & min of FLOW AWAY');
-    xlabel('\psi_1');
-    ylabel('\psi_2');
-    zlabel('\psi_3');
-    c.Label.String = 'step';
-    set(gca, 'FontSize', 24); 
-    grid on;
-    hold off;
+%     figure; hold on; scatter3(EigVec(:,6), EigVec(:,8), EigVec(:,8), 100 ,cut_info(:,9), 'Fill'); c=colorbar;
+%     title('diffusion map of mean & var & max & min of FLOW AWAY');
+%     xlabel('\psi_1');
+%     ylabel('\psi_2');
+%     zlabel('\psi_3');
+%     c.Label.String = 'step';
+%     set(gca, 'FontSize', 24); 
+%     grid on;
+%     hold off;
