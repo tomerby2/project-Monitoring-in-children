@@ -82,7 +82,7 @@ clc;
     [EigVec, EigVal] = diffusion_map(cut_info(:,5:8), 3);
     
     %% plot average heart rate
-    figure; hold on; title('average heart rate in cut (about 13 minutes) from BP');
+    figure; hold on; title('average heart rate in cut (about 13 minutes) from PPG');
     xlabel('time [hour]'); 
     ylabel('beats per minute'); 
     plot(mean(cut_info(:,3:4),2), cut_info(:,5), 'LineWidth', 1); 
