@@ -8,7 +8,7 @@ close all
 clear;
 clc
 
-mX      = csvread('C:\Users\User\Documents\project\DATA\new data\150\0000150_1496373935344_NOM_PLETH_POST_DUCTAL.csv');
+mX      = csvread('C:\Users\User\Documents\project\DATA\new data\150\0000150_1496373935344_MDC_PRESS_BLD_ART.csv');
 sig     = mX(:,2);
 tm      = mX(:,1);
 dt      = tm(2)- tm(1);
@@ -18,7 +18,7 @@ step    = round(5*60/dt); % number of sampels in 5 minutes
 ii      = 1;
 for jj  = 1:step:x
         part    = mX(jj:(min(jj+step-1,x)),1:2);
-        name    = sprintf('PLETH_150_part_%d.csv',ii);
+        name    = sprintf('BP_150_part_%d.csv',ii);
         dlmwrite(name, part, 'delimiter', ',', 'precision', 13);
         ii      = ii + 1; 
 end
