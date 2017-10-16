@@ -9,5 +9,6 @@ function [ EigVec, EigVal ] = diffusion_map( features, k )
 
     [EigVec, EigVal] = eig(A);
 
+
 end
 

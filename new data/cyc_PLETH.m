@@ -10,7 +10,7 @@ for ii = 1 : L
     mX                  = csvread([dirPath, fileName]);
     sig                 = mX(:,2);
     tm                  = mX(:,1);
-    [~, max_locs]       = findpeaks(sig, 'MinPeakHeight', median(sig)-100, 'MinPeakDistance', 30, 'MinPeakDistance', 50);
+    [~, max_locs]       = findpeaks(sig, 'MinPeakHeight', median(sig)-100, 'MinPeakDistance', 30, 'MinPeakDistance', 30);
     tm_max              = tm(max_locs);
     
 %     plot(tm, sig,'linewidth',1.5); xlabel('time'); ylabel('amplitude'); grid on; hold on;

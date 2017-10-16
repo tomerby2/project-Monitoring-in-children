@@ -43,11 +43,11 @@ for ii = 1 : L
 end
     
  %% show histograms
-%     figure;
-%     for kk=1:length(histograms_cyc)
-%         bar(histograms_cyc(kk,:));
-%         pause(0.3);
-%     end
+    figure;
+    for kk=1:size(abs_F,2)
+        plot(abs_F(kk,1:100));
+        pause(0.3);
+    end
     %% sort the files according to time
     [~,index]               = sort(cut_info(:,1),'ascend');
     
@@ -92,7 +92,7 @@ end
     [EigVec_f, EigVal_f] = diffusion_map(abs_F, 1);
      
     %% diffusion map on mean & var & max & min
-    [EigVec, EigVal]            = diffusion_map(cut_info(:,5:8), 4);
+    [EigVec, EigVal]            = diffusion_map(cut_info(:,5:8), 5);
     EigVal_index                = EigVal~=0;
     EigVal_vec                  = EigVal(EigVal_index);
     [EigVal_vec,EigVal_index]   = sort(EigVal_vec,'descend');
@@ -180,13 +180,13 @@ end
     set(gca, 'FontSize', 24); 
     grid on;
     
-    %% plotting diffusion map of mean & var & max & min colored according to "steps" in mean breath
-%     figure; hold on; scatter3(EigVec(:,6), EigVec(:,8), EigVec(:,8), 100 ,cut_info(:,9), 'Fill'); c=colorbar;
-%     title('diffusion map of mean & var & max & min of FLOW AWAY');
-%     xlabel('\psi_1');
-%     ylabel('\psi_2');
-%     zlabel('\psi_3');
-%     c.Label.String = 'step';
-%     set(gca, 'FontSize', 24); 
-%     grid on;
-%     hold off;
+    %% plotting diffusion map of mean & var & max & min colored according to end of midical breaths
+    figure; hold on; scatter3(EigVec_f(:,6), EigVec_f(:,7), EigVec_f(:,8), 100 ,cut_info(:,9), 'Fill'); c=colorbar;
+    title('diffusion map of mean & var & max & min of RESP');
+    xlabel('\psi_1');
+    ylabel('\psi_2');
+    zlabel('\psi_3');
+    c.Label.String = 'with or without';
+    set(gca, 'FontSize', 24); 
+    grid on;
+    hold off;
