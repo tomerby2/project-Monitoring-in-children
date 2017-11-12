@@ -94,10 +94,11 @@ clc;
     temp                        = EigVec;
     EigVec                      = temp(EigVal_index,:);
     %% plot average breathing rate
-    figure; hold on; title('average breath rate in cut (about 13 minutes) from FLOW AWAY');
+    figure; hold on; title('average breath rate from Air Flow');
     xlabel('time [hour]'); 
     ylabel('bearths per minute'); 
-    plot(mean(cut_info(:,3:4),2), cut_info(:,5), 'LineWidth', 1); 
+    plot(mean(cut_info(1:111,3:4),2), cut_info(1:111,5), 'b', mean(cut_info(112:200,3:4),2), cut_info(112:200,5), 'g',...
+        mean(cut_info(201:269,3:4),2), cut_info(201:269,5), 'b', mean(cut_info(270:end,3:4),2), cut_info(270:end,5), 'y','linewidth',1.5);
     set(gca, 'FontSize', 24); 
     grid on;
     hold off;

@@ -43,11 +43,11 @@ for ii = 1 : L
 end
     
  %% show histograms
-    figure;
-    for kk=1:size(abs_F,2)
-        plot(abs_F(kk,1:100));
-        pause(0.3);
-    end
+%     figure;
+%     for kk=1:size(abs_F,2)
+%         plot(abs_F(kk,1:100));
+%         pause(0.3);
+%     end
     %% sort the files according to time
     [~,index]               = sort(cut_info(:,1),'ascend');
     
@@ -181,7 +181,7 @@ end
     grid on;
     
     %% plotting diffusion map of mean & var & max & min colored according to end of midical breaths
-    figure; hold on; scatter3(EigVec_f(:,6), EigVec_f(:,7), EigVec_f(:,8), 100 ,cut_info(:,9), 'Fill'); c=colorbar;
+    figure; hold on; scatter3(EigVec(:,6), EigVec(:,7), EigVec(:,8), 100 ,cut_info(:,9), 'Fill'); c=colorbar;
     title('diffusion map of mean & var & max & min of RESP');
     xlabel('\psi_1');
     ylabel('\psi_2');

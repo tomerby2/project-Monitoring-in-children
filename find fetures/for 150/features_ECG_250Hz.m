@@ -49,7 +49,8 @@ clc;
         ecg_for_fft         = ecgsig-mean(ecgsig);
         abs_F(ii,:)         = abs(fft(ecg_for_fft/norm(ecg_for_fft),N))';
     %% creating matrix with histogram rows for interpolation from RR pionts
-        edges                   = linspace(7500,7900,100);
+        edges                   = linspace(7500,7900,100); %150
+%             edges                   = linspace(8300,8500,100); %151
         histograms_interp(ii,:) = histcounts(interp_RR,edges)/length(interp_RR); 
     %% creating matrix with fourier rows for interpolation of RR points
         interp_for_fft      = interp_RR-mean(interp_RR);
@@ -82,8 +83,11 @@ clc;
 %     cut_info(497:557,9) = 3;
 
     % classification according to end of midical breaths
-    cut_info_ecg(1:47,9)   = 0;
+    cut_info_ecg(1:47,9)   = 0; %150
     cut_info_ecg(48:end,9) = 1;  
+%     cut_info_ecg(1:27,9)   = 0; %151
+%     cut_info_ecg(28:end,9) = 1; 
+
     
     
     temp_hist               = histograms_wave;
@@ -135,6 +139,9 @@ clc;
     
     %% plotting diffusion map of histograms wave colored according to time
     figure; hold on; scatter3(EigVec_h_wave(:,2), EigVec_h_wave(:,3), EigVec_h_wave(:,4), 100, mean(cut_info_ecg(:,3:4),2) ,'Fill'); c=colorbar;
+%     for jj=1:length(EigVec_h_wave(:,2))
+%         text(EigVec_h_wave(jj,2), EigVec_h_wave(jj,3), EigVec_h_wave(jj,4), num2str(jj), 'color', 'red', 'HorizontalAlignment', 'center');
+%     end
     title('diffusion map on histograms of the full wave ');
     xlabel('\psi_1');
     ylabel('\psi_2');
@@ -159,7 +166,7 @@ clc;
     xlabel('\psi_1');
     ylabel('\psi_2');
     zlabel('\psi_3');
-    c.Label.String = 'with or without';
+    c.Label.String = 'with or without respiator';
     set(gca, 'FontSize', 24); 
     grid on;
     hold off;
@@ -185,11 +192,14 @@ clc;
 %     hold off;
     %% plotting diffusion map of histograms RR colored according to end of midical breaths
     figure; hold on; scatter3(EigVec_h_RR(:,2), EigVec_h_RR(:,3), EigVec_h_RR(:,4), 100, cut_info_ecg(:,9) ,'Fill'); c=colorbar;
+%     for jj=1:length(EigVec_h_RR(:,2))
+%         text(EigVec_h_RR(jj,2), EigVec_h_RR(jj,3), EigVec_h_RR(jj,4), num2str(jj), 'color', 'red', 'HorizontalAlignment', 'center');
+%     end
     title('diffusion map on histograms of the RR distances');
     xlabel('\psi_1');
     ylabel('\psi_2');
     zlabel('\psi_3');
-    c.Label.String = 'with or without';
+    c.Label.String = 'with or without respiator';
     set(gca, 'FontSize', 24);
     grid on;
     hold off;
@@ -219,13 +229,13 @@ clc;
     xlabel('\psi_1');
     ylabel('\psi_2');
     zlabel('\psi_3');
-    c.Label.String = 'with or without';
+    c.Label.String = 'with or without respiator';
     set(gca, 'FontSize', 24); 
     grid on;
     hold off;
     %% plotting diffusion map of histograms interpolation from RR points colored according to time
     figure; hold on; scatter3(EigVec_h_interp(:,2), EigVec_h_interp(:,3), EigVec_h_interp(:,4), 100, mean(cut_info_ecg(:,3:4),2) ,'Fill'); c=colorbar;
-    title('diffusion map on histograms of the interpolation from RR points full wave ');
+    title({'diffusion map on full wave histograms', 'of the interpolation from RR points'});
     xlabel('\psi_1');
     ylabel('\psi_2');
     zlabel('\psi_3');
@@ -235,11 +245,14 @@ clc;
     hold off;
      %% plotting diffusion map of histograms interpolation from RR points colored according to end of midical breaths
     figure; hold on; scatter3(EigVec_h_interp(:,2), EigVec_h_interp(:,3), EigVec_h_interp(:,4), 100, cut_info_ecg(:,9) ,'Fill'); c=colorbar;
-    title('diffusion map on histograms of the interpolation from RR points full wave ');
+%     for jj=1:length(EigVec_h_interp(:,2))
+%         text(EigVec_h_interp(jj,2), EigVec_h_interp(jj,3), EigVec_h_interp(jj,4), num2str(jj), 'color', 'red', 'HorizontalAlignment', 'center');
+%     end
+    title({'diffusion map on full wave histograms', 'of the interpolation from RR points'});
     xlabel('\psi_1');
     ylabel('\psi_2');
     zlabel('\psi_3');
-    c.Label.String = 'with or without';
+    c.Label.String = 'with or without respiator';
     set(gca, 'FontSize', 24); 
     grid on;
     hold off;
@@ -259,7 +272,7 @@ clc;
     xlabel('\psi_1');
     ylabel('\psi_2');
     zlabel('\psi_3');
-    c.Label.String = 'with or without';
+    c.Label.String = 'with or without respiator';
     set(gca, 'FontSize', 24); 
     grid on;
     hold off;
